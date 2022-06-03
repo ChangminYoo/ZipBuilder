@@ -1,45 +1,69 @@
 import zipfile
 from zipfile import ZipFile
+import tkinter
 import os
 import shutil
 
-# Directory Path
-dirPath = 'C:/morph/'
-inputPath = 'AvatarStudio/StagingProject'
+# 포함 되어야 할 폴더
 includes = ['/Assets', '/Packages', '/ProjectSettings']
-outputPath = 'test.zip'
 
-def zipFilesInDir():
-    owd = os.getcwd()  # 현재 working directory를 기록
-    os.chdir(dirPath)  # 압축 파일 생성할 폴더로 working directory 를 이동
-    zipObj = ZipFile(outputPath, 'w')
+# input 디렉토리 절대경로
+avatarStudioDir = 'C:/morph/AvatarStudio/StagingProject'
+buildDir = 'C:/morph/BuildProject/BuildProject_DLL'
+#webGLDir = 'C:/morph/WebGL Viewer'
 
-    for folderName, subfolders, filenames in os.walk(inputPath):
-        zipObj.write(folderName, compress_type=zipfile.ZIP_DEFLATED)
-        for filename in filenames:
-            zipObj.write(os.path.join(folderName, filename), compress_type=zipfile.ZIP_DEFLATED)
+# 산출 절대경로
+output = 'C:/morph/Test'
+avatarStudioOut = output + '/OpenStudio'
+buildOut = output + '/Build'
+#webGLOut = output + '/WebGL'
 
-    os.chdir(owd)
-    zipObj.close()
+directoryDictionary = {avatarStudioDir: avatarStudioOut, buildDir: buildOut}
 
-def zipFilesInDir2():
-    pass
+# 산출될 파일 이름
+avatarStudioOutName = 'OpenStudio'
+buildName = 'Build'
+#webGLName = 'WebGL'
+
+outputDictionary = {avatarStudioOut: avatarStudioOutName, buildOut: buildName}
+
+def existPath(directory):
+    if os.path.isdir(directory):
+        return True
+    else:
+        print("Not Exist ::: ", directory)
+        return False
+
+def makeZip():
+    print('------------ START -------------')
+    # includes에 속한 폴더만 복사
+    for directory in directoryDictionary:
+        # if directory == buildDir:
+        #    includes.append('/Library')
+        for folder in includes:
+            if existPath(directory + folder):
+                shutil.copytree(directory + folder, directoryDictionary[directory] + folder, dirs_exist_ok=True)
+                print("Copy To ::: ", directoryDictionary[directory] + folder)
+
+    # zip으로 변환
+    print("Zipping................")
+    for out in outputDictionary:
+        filename = outputDictionary[out]
+        os.chdir(output)
+        shutil.make_archive(filename, 'zip', out)
+
+    print('------------ FINISH -------------')
+
+def guiInit():
+    window = tkinter.Tk()
+
+    window.title("ZipBuilder")
+    window.geometry("300x300+100+100")
+
+    startButton = tkinter.Button(window, text='Start', width=20, overrelief='solid', command=makeZip)
+    startButton.place(x=80, y=100)
+
+    window.mainloop()
 
 if __name__ == '__main__':
-    out = 'C:/morph/Test'
-
-    avatarStudioDir = 'C:/morph/AvatarStudio/StagingProject'
-    buildDir = 'C:/morph/BuildProject/BuildProject_DLL'
-    webGLDir = 'C:/morph/WebGL Viewer'
-
-    avatarStudioOut = out + '/OpenStudio'
-    buildOut = out + '/Build'
-    webGLOut = out + '/WebGL'
-
-    for folder in includes:
-        shutil.copytree(avatarStudioDir + folder, avatarStudioOut + folder)
-        shutil.copytree(buildDir + folder, buildOut + folder)
-
-    filename = 'Test'
-    os.chdir('C:/morph')
-    shutil.make_archive(filename, 'zip', out)
+    guiInit()
