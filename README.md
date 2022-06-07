@@ -2,8 +2,8 @@
 
 ## 설정 변수값
  - 포함 되어야 할 폴더 : '/Assets', '/Packages', '/ProjectSettings'
- - input 폴더 경로 : 'C:/morph/AvatarStudio/StagingProject' , 'C:/morph/BuildProject/BuildProject_DLL'
- - output 폴더 경로 : 'C:/morph/Result'
+ - input 폴더 경로 :
+ - output 폴더 경로 : 
  - output 이름 : OpenStudio, Build
 
  디렉토리 추가시 각 input/output dictionary에도 추가 필요
