@@ -21,3 +21,6 @@ py -3 main.py
 프로젝트 경로 쉘에서 명령어 실행
 1. pip install pyinstaller  (처음에만)
 2. pyinstaller --onfile main.py
+
+## 결과물
+![zipbuilder](https://user-images.githubusercontent.com/22344444/172518821-553e50f3-e257-4078-b73a-3d8c60a3d860.gif)
