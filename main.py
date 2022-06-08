@@ -108,7 +108,7 @@ class ZipBuilder:
             filename = directoryDictionary[out]
             os.chdir(output)
             if exist_path(out):
-                shutil.make_archive(filename, 'zip', out)
+                shutil.make_archive(filename, 'zip', filename)
 
         print('------------ FINISH -------------')
 
