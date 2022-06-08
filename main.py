@@ -6,6 +6,7 @@ import tkinter
 from tkinter import filedialog
 from functools import partial
 import tkinter.messagebox as messagebox
+import webbrowser
 
 # 포함 되어야 할 폴더
 includes = ['/Assets', '/Packages', '/ProjectSettings']
@@ -115,7 +116,7 @@ class ZipBuilder:
         tkinter.messagebox.showinfo('완료', '완료 했습니다.')
         self.window.destroy()
         self.window.quit()
-
+        webbrowser.open(output)
 
 if __name__ == '__main__':
     # make_zip()
