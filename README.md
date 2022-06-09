@@ -1,5 +1,7 @@
 # ZipBuilder
 
+push 버튼으로 input 경로 수정 후 Start 버튼으로 시작.
+
 ## 설정 변수값
  - 포함 되어야 할 폴더 : '/Assets', '/Packages', '/ProjectSettings'
  - input 폴더 경로 :
