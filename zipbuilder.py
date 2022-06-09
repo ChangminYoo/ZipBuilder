@@ -31,6 +31,8 @@ class ZipBuilder:
         self.window = tkinter.Tk()
         self.dir_count = 0
         self.label_text = []
+        self.out_text = tkinter.StringVar(value=self.out_dir)
+
         self.window.title("ZipBuilder")
         self.window.geometry("350x300+100+100")
 
@@ -55,9 +57,10 @@ class ZipBuilder:
         top_label = tkinter.Label(text='디렉토리 경로를 변경할 수 있습니다.', width=40, relief='solid', fg='red')
         top_label.pack()
 
-        output_button = tkinter.Button(self.window, text='산출 경로 수정', width=25,
-                                       command=self.open_output_dir)
-        output_button.place(x=80, y=200)
+        out_label = tkinter.Label(textvariable=self.out_text, width=35, relief='solid')
+        out_label.place(x=60, y=207)
+        output_button = tkinter.Button(self.window, text='산출경로', command=self.open_output_dir)
+        output_button.place(y=205)
 
         start_button = tkinter.Button(self.window, text='Start', width=25, command=self.make_zip)
         start_button.place(x=80, y=250)
@@ -85,6 +88,7 @@ class ZipBuilder:
     def open_output_dir(self):
         dir_name = filedialog.askdirectory(parent=self.window, initialdir="/", title='폴더를 선택해 주세요')
         self.out_dir = dir_name
+        self.out_text.set(dir_name + '/' + self.folder_name)
         for directory in self.dir_dictionary:
             string_list = directory.split('/')
             self.dir_dictionary[directory] = self.out_dir + '/' + self.folder_name + string_list[len(string_list) - 2]
