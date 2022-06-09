@@ -6,12 +6,11 @@ push 버튼으로 input 경로 지정, 산출 경로 지정 후 Start 버튼으�
  코드 수정 필요 
  - 포함 되어야 할 폴더 : '/Assets', '/Packages', '/ProjectSettings'
  - input의 추가 및 제거
+ - output의 상위 폴더이름
 
  경로 수정 가능
- - input 폴더 경로
- - output 폴더 경로
-
- 디렉토리 추가시 각 input/output dictionary에도 추가 필요
+ - input 경로
+ - output 경로
  
 ## 목표
  프로젝트 빌드 간소화 / 자동화를 위한 프로그램 개발.
@@ -26,6 +25,3 @@ py -3 main.py
 프로젝트 경로 쉘에서 명령어 실행
 1. pip install pyinstaller  (처음에만)
 2. pyinstaller --onfile main.py
-
-## 결과물
-![zipbuilder](https://user-images.githubusercontent.com/22344444/172518821-553e50f3-e257-4078-b73a-3d8c60a3d860.gif)
