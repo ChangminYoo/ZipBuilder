@@ -1,12 +1,15 @@
 # ZipBuilder
 
-push 버튼으로 input 경로 수정 후 Start 버튼으로 시작.
+push 버튼으로 input 경로 지정, 산출 경로 지정 후 Start 버튼으로 시작.
 
 ## 설정 변수값
+ 코드 수정 필요 
  - 포함 되어야 할 폴더 : '/Assets', '/Packages', '/ProjectSettings'
- - input 폴더 경로 :
- - output 폴더 경로 : 
- - output 이름 : OpenStudio, Build
+ - input의 추가 및 제거
+
+ 경로 수정 가능
+ - input 폴더 경로
+ - output 폴더 경로
 
  디렉토리 추가시 각 input/output dictionary에도 추가 필요
  
