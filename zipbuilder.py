@@ -44,22 +44,13 @@ class ZipBuilder:
 
         self.window.mainloop()
 
-    def add_button(self):
-        if self.dir_count > 2:
-            return
-        # input
-        input_button = tkinter.Button(self.window, text='Input', command=lambda: self.open_dir(self.dir_count))
-        input_button.pack()
-
-        self.dir_count += 1
-
     def set_buttons(self):
         top_label = tkinter.Label(text='디렉토리 경로를 변경할 수 있습니다.', width=40, relief='solid', fg='red')
         top_label.pack()
 
         out_label = tkinter.Label(textvariable=self.out_text, width=35, relief='solid')
         out_label.place(x=60, y=207)
-        output_button = tkinter.Button(self.window, text='산출경로', command=self.open_output_dir)
+        output_button = tkinter.Button(self.window, text='산출경로', command=partial(self.open_dir, 0, False))
         output_button.place(y=205)
 
         start_button = tkinter.Button(self.window, text='Start', width=25, command=self.make_zip)
@@ -73,25 +64,26 @@ class ZipBuilder:
             dir_label = tkinter.Label(textvariable=self.label_text[i], width=40, relief='solid')
             dir_label.place(x=40, y=52*(i+1))
 
-            dir_button = tkinter.Button(self.window, text='push', command=partial(self.open_dir, i))
+            dir_button = tkinter.Button(self.window, text='push', command=partial(self.open_dir, i, True))
             dir_button.place(y=50*(i+1))
 
-    def open_dir(self, num):
+    def open_dir(self, num, is_input):
         dir_name = filedialog.askdirectory(parent=self.window, initialdir="/", title='폴더를 선택해 주세요')
-        print('num', num, '  Select : ', dir_name)
-        if num < len(self.dir_list):
-            self.dir_list[num] = dir_name
-            self.label_text[num].set(dir_name)
-        else:
-            pass
+        print('Select : ', dir_name)
 
-    def open_output_dir(self):
-        dir_name = filedialog.askdirectory(parent=self.window, initialdir="/", title='폴더를 선택해 주세요')
-        self.out_dir = dir_name
-        self.out_text.set(dir_name + '/' + self.folder_name)
-        for directory in self.dir_dictionary:
-            string_list = directory.split('/')
-            self.dir_dictionary[directory] = self.out_dir + '/' + self.folder_name + string_list[len(string_list) - 2]
+        if is_input:
+            if num < len(self.dir_list):
+                self.dir_list[num] = dir_name
+                self.label_text[num].set(dir_name)
+            else:
+                pass
+        else:
+            self.out_dir = dir_name
+            self.out_text.set(dir_name + '/' + self.folder_name)
+            for directory in self.dir_dictionary:
+                string_list = directory.split('/')
+                self.dir_dictionary[directory] = \
+                    self.out_dir + '/' + self.folder_name + string_list[len(string_list) - 2]
 
     def exist_path(self, directory):
         if os.path.isdir(directory):
