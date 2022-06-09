@@ -21,7 +21,10 @@ class ZipBuilder:
 
     # 산출 절대경로
     out_dir = 'C:/morph/Result'
+    # 산출 상위 폴더 이름
+    folder_name = 'Result/'
 
+    # input에서 각 산출될 이름을 저장
     dir_dictionary = {}
 
     def __init__(self):
@@ -33,7 +36,7 @@ class ZipBuilder:
 
         for directory in self.dir_list:
             string_list = directory.split('/')
-            self.dir_dictionary[directory] = self.out_dir + '/' + string_list[len(string_list) - 1]
+            self.dir_dictionary[directory] = self.out_dir + '/' + self.folder_name + string_list[len(string_list) - 2]
 
         self.set_buttons()
 
@@ -84,7 +87,7 @@ class ZipBuilder:
         self.out_dir = dir_name
         for directory in self.dir_dictionary:
             string_list = directory.split('/')
-            self.dir_dictionary[directory] = self.out_dir + '/' + string_list[len(string_list) - 1]
+            self.dir_dictionary[directory] = self.out_dir + '/' + self.folder_name + string_list[len(string_list) - 2]
 
     def exist_path(self, directory):
         if os.path.isdir(directory):
