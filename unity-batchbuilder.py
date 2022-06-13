@@ -4,11 +4,11 @@ import tkinter.ttk as ttk
 import tkinter.messagebox as messagebox
 import os
 import webbrowser
-
+import pathlib
 
 class BatchBuilder:
     default_unity_path = 'C:/Program Files/Unity/Hub/Editor/'
-    batch_file = 'batchmodeBuild.bat'
+    batch_file = r'.bat'
     build_dir = '/Build/'
 
     def __init__(self):
@@ -32,6 +32,9 @@ class BatchBuilder:
 
     def write_batch_file(self):
         print("-------------------Start Build--------------------")
+
+        self.batch_file =\
+            [file for file in os.listdir(self.project_dir_text.get()) if file.endswith(self.batch_file)][0]
 
         os.chdir(self.project_dir_text.get())
         with open(self.batch_file, 'w') as file:
