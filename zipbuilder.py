@@ -37,7 +37,6 @@ class ZipBuilder:
         self.window.geometry("350x300+100+100")
 
         for directory in self.dir_list:
-            string_list = directory.split('/')
             self.dir_dictionary[directory] = self.make_out_name(directory)
 
         self.set_buttons()
@@ -74,7 +73,6 @@ class ZipBuilder:
         if is_input:
             if self.dir_list[num] in self.dir_dictionary:
                 self.dir_dictionary.pop(self.dir_list[num])
-            string = dir_name.split('/')
             self.dir_dictionary[dir_name] = self.make_out_name(dir_name)
             self.dir_list[num] = dir_name
             self.label_text[num].set(dir_name)
@@ -82,7 +80,6 @@ class ZipBuilder:
             self.out_dir = dir_name
             self.out_text.set(dir_name + self.folder_name)
             for directory in self.dir_dictionary:
-                string_list = directory.split('/')
                 self.dir_dictionary[directory] = self.make_out_name(directory)
 
     def make_out_name(self, st):
