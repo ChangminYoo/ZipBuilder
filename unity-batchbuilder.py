@@ -1,15 +1,16 @@
 import tkinter
 from tkinter import filedialog
-import tkinter.ttk as ttk
+from tkinter import ttk
 import tkinter.messagebox as messagebox
 import os
 import webbrowser
-import pathlib
+
 
 class BatchBuilder:
     default_unity_path = 'C:/Program Files/Unity/Hub/Editor/'
     batch_file = r'.bat'
     build_dir = '/Build/'
+    targets = ['win64', 'android', 'ios', 'webgl']
 
     def __init__(self):
         self.combobox = None
@@ -25,7 +26,7 @@ class BatchBuilder:
 
         print("-------------------Complete Build!!--------------------")
 
-        webbrowser.open(self.project_dir_text.get()+self.build_dir)
+        webbrowser.open(self.project_dir_text.get() + self.build_dir)
         tkinter.messagebox.showinfo('완료', '완료 했습니다.')
         self.window.destroy()
         self.window.quit()
@@ -33,7 +34,7 @@ class BatchBuilder:
     def write_batch_file(self):
         print("-------------------Start Build--------------------")
 
-        self.batch_file =\
+        self.batch_file = \
             [file for file in os.listdir(self.project_dir_text.get()) if file.endswith(self.batch_file)][0]
 
         os.chdir(self.project_dir_text.get())
@@ -58,32 +59,41 @@ class BatchBuilder:
         self.unity_dir_text.set(filename)
 
     def gui_init(self):
+        self.window.tk.call("source", "azure.tcl")
+        self.window.tk.call("set_theme", "light")
+
         self.window.title("UnityBatchBuilder")
-        self.window.geometry("350x300+100+100")
+        self.window.geometry("400x300+300+300")
+
+        style = ttk.Style()
+        style.configure('Accent.TButton', foreground='white')
 
         # Unity 경로
-        tkinter.Label(self.window, text='유니티 경로를 선택해 주세요.', width=40).pack()
-        unity_dir_button = tkinter.Button(self.window, text='path', command=self.open_file)
-        unity_dir_button.place(y=18)
-        unity_dir_label = tkinter.Label(self.window, textvariable=self.unity_dir_text, width=35, relief='sunken')
-        unity_dir_label.pack()
+        unity_path_label = ttk.Label(self.window, text='유니티 경로를 설정해 주세요.')
+        unity_path_label.place(x=110, y=20)
+        unity_dir_button = ttk.Button(self.window, text='path', command=self.open_file, width=8, style="Accent.TButton")
+        unity_dir_button.place(x=5, y=40)
+        unity_dir_label = ttk.Label(self.window, textvariable=self.unity_dir_text, width=40, relief='sunken')
+        unity_dir_label.place(x=100, y=45)
 
         # 빌드 할 프로젝트 경로
-        tkinter.Label(self.window, text='빌드 경로를 설정해 주세요.', width=40).pack()
-        project_dir_button = tkinter.Button(self.window, text='path', command=self.open_dir)
-        project_dir_button.place(y=60)
-        project_dir_label = tkinter.Label(self.window, textvariable=self.project_dir_text, width=35, relief='sunken')
-        project_dir_label.pack()
+        build_path_label = ttk.Label(self.window, text='빌드 경로를 설정해 주세요.')
+        build_path_label.place(x=110, y=85)
+        project_dir_button = ttk.Button(self.window, text='path', command=self.open_dir, width=8, style="Accent.TButton")
+        project_dir_button.place(x=5, y=110)
+        project_dir_label = ttk.Label(self.window, textvariable=self.project_dir_text, width=40, relief='sunken')
+        project_dir_label.place(x=100, y=115)
 
         # 빌드 타겟 설정
-        tkinter.Label(self.window, text='빌드 타겟을 설정해 주세요.', width=40).pack()
-        values = ['win64', 'android', 'ios', 'webgl']
-        self.combobox = ttk.Combobox(self.window, height=5, values=values)
-        self.combobox.set('webgl')
-        self.combobox.pack()
+        build_target_label = tkinter.Label(self.window, text='빌드 타겟을 선택해 주세요.', width=40)
+        build_target_label.place(x=50, y=155)
 
-        start_button = tkinter.Button(self.window, text='Build', width=25, command=self.run_batch_file)
-        start_button.place(x=80, y=250)
+        self.combobox = ttk.Combobox(self.window, state='readonly', height=5, values=self.targets)
+        self.combobox.set('webgl')
+        self.combobox.place(x=120, y=190)
+
+        start_button = ttk.Button(self.window, text='Build', width=25, command=self.run_batch_file)
+        start_button.place(x=100, y=250)
 
         self.window.mainloop()
 
