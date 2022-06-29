@@ -52,8 +52,8 @@ class ZipBuilder:
         # text
         self.move_input_text = tkinter.StringVar(value='C:/')
         self.move_output_text = tkinter.StringVar(value='C:/')
+        self.mover_result_folder = tkinter.StringVar(value='StagingProject')
         self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
-        self.result_folder = tkinter.StringVar(value='StagingProject')
 
         # notebook
         notebook = ttk.Notebook(self.window, width=self.windowWidth, height=self.windowHeight)
@@ -73,7 +73,7 @@ class ZipBuilder:
             name = tkinter.StringVar()
             name.set(target)
             self.entry_list.append(name)
-        self.set_mover_GUI()
+        self.set_mover_gui()
 
         self.window.mainloop()
 
@@ -150,7 +150,7 @@ class ZipBuilder:
     # endregion
 
     # region Mover
-    def set_mover_GUI(self):
+    def set_mover_gui(self):
         # Input
         input_frame = ttk.LabelFrame(self.frame_move, text='Input')
         input_frame.place(x=20, y=5, width=self.windowWidth - 40, height=50)
@@ -179,7 +179,7 @@ class ZipBuilder:
             entry.place(x=80, y=135 + (i * 30))
 
         # ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=390, y=312)
-        ttk.Entry(self.frame_move, textvariable=self.result_folder, width=20).place(x=140, y=370)
+        ttk.Entry(self.frame_move, textvariable=self.mover_result_folder, width=20).place(x=140, y=370)
         move_button = ttk.Button(self.frame_move, text='Move', width=25, command=self.move_folder)
         move_button.place(x=120, y=425)
 
@@ -258,7 +258,7 @@ class ZipBuilder:
                         # input과 output이 같은 경로일 경우에는 이동만
                         shutil.move(move, to)
         else:
-            output = self.move_output_text.get() + '/' + self.result_folder.get()
+            output = self.move_output_text.get() + '/' + self.mover_result_folder.get()
             for folder in includes:
                 shutil.copytree(self.move_input_text.get() + folder, output + folder, dirs_exist_ok=True)
             self.delete_metafile()
@@ -273,7 +273,7 @@ class ZipBuilder:
         webbrowser.open(to)
 
     def delete_metafile(self):
-        path = self.move_output_text.get() + '/' + self.result_folder.get() + '/Assets'
+        path = self.move_output_text.get() + '/' + self.mover_result_folder.get() + '/Assets'
         for file in os.listdir(path):
             if file.endswith('.meta'):
                 os.remove(os.path.join(path, file))
