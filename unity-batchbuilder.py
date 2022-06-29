@@ -1,10 +1,11 @@
 import tkinter
 from tkinter import filedialog
-from tkinter import ttk
-import ttkbootstrap
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 import tkinter.messagebox as messagebox
 import os
 import webbrowser
+
 
 class BatchBuilder:
     default_unity_path = 'C:/Program Files/Unity/Hub/Editor/'
@@ -14,7 +15,9 @@ class BatchBuilder:
 
     def __init__(self):
         self.combobox = None
-        self.window = ttkbootstrap.Window(themename='journal')
+        self.window = ttk.Window("UnityBachBuilder", themename='journal')
+        self.window.geometry("400x300+300+300")
+
         self.unity_dir_text = tkinter.StringVar()
         self.project_dir_text = tkinter.StringVar()
 
@@ -59,9 +62,6 @@ class BatchBuilder:
         self.unity_dir_text.set(filename)
 
     def gui_init(self):
-        self.window.title("UnityBatchBuilder")
-        self.window.geometry("400x300+300+300")
-
         # Unity 경로
         unity_path_label = ttk.Label(self.window, text='유니티 경로를 설정해 주세요.')
         unity_path_label.place(x=110, y=20)

@@ -2,8 +2,7 @@ import os
 import shutil
 import tkinter
 from tkinter import filedialog
-from tkinter import ttk
-import ttkbootstrap
+import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 import tkinter.messagebox as messagebox
 import webbrowser
@@ -12,12 +11,14 @@ from functools import partial
 # 포함 되어야 할 폴더
 includes = ['/Assets', '/Packages', '/ProjectSettings']
 
-# 이동시킬 기본 폴더
+# 이동할 기본 폴더
 move_targets = ['com.unity.sharp-zip-lib@1.2.2-preview.2',
                 'Ifland AvatarEngine',
                 'Ifland AvatarEngine Using ExPlugins',
+                'Ifland AvatarOpenEngine',
                 'ifland.tra@2.3.45',
-                # 나중에 TReal 폴더도 추가 예정
+                'StreamingAssets',
+                'Treal'
                 ]
 
 
@@ -42,23 +43,24 @@ class ZipBuilder:
         self.entry_list = []  # mover entry list - target folder to move
 
         self.windowWidth = 450
-        self.windowHeight = 450
+        self.windowHeight = 500
 
-        self.window = ttkbootstrap.Window(themename='cosmo')
-        self.move_input_text = tkinter.StringVar()
-        self.move_output_text = tkinter.StringVar()
-        self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
-
-        self.window.title("ZipBuilder")
-        self.window.update()
+        # window
+        self.window = ttk.Window("ZipBuilder", themename='cosmo')
         self.window.geometry("{}x{}+500+300".format(self.windowWidth, self.windowHeight))
+
+        # text
+        self.move_input_text = tkinter.StringVar(value='C:/')
+        self.move_output_text = tkinter.StringVar(value='C:/')
+        self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
+        self.result_folder = tkinter.StringVar(value='StagingProject')
 
         # notebook
         notebook = ttk.Notebook(self.window, width=self.windowWidth, height=self.windowHeight)
         notebook.pack()
-        self.frame_zip = tkinter.Frame(self.window)
+        self.frame_zip = ttk.Frame(self.window)
         notebook.add(self.frame_zip, text='Zipper')
-        self.frame_move = tkinter.Frame(self.window)
+        self.frame_move = ttk.Frame(self.window)
         notebook.add(self.frame_move, text='Mover')
 
         # set Zipper
@@ -149,30 +151,37 @@ class ZipBuilder:
 
     # region Mover
     def set_mover_GUI(self):
-        ttk.Label(self.frame_move, text='디렉토리를 변경할 수 있습니다.').pack()
-        self.move_input_text.set('C:/')
-
-        input_frame = ttk.LabelFrame(self.frame_move, text='Input', padding=(20, 10))
-        input_frame.place(x=15, y=30, width=self.windowWidth - 30, height=280)
-
+        # Input
+        input_frame = ttk.LabelFrame(self.frame_move, text='Input')
+        input_frame.place(x=20, y=5, width=self.windowWidth - 40, height=50)
         input_label = ttk.Label(self.frame_move, textvariable=self.move_input_text,
                                 relief='sunken', width=45, anchor=tkinter.CENTER)
-        input_label.place(x=100, y=60)
+        input_label.place(x=100, y=25)
         input_button = ttk.Button(self.frame_move, text='Path', style='Accent.TButton',
-                                  width=5, command=partial(self.open_dir_move))
-        input_button.place(x=30, y=55)
+                                  width=5, command=partial(self.open_dir_move, True))
+        input_button.place(x=30, y=20)
 
-        move_label = ttk.Label(self.frame_move, text='Move List')
-        move_label.place(x=30, y=(100 + (40 * len(self.entry_list) / 2)))
+        # Output
+        output_frame = ttk.LabelFrame(self.frame_move, text='Output')
+        output_frame.place(x=20, y=60, width=self.windowWidth - 40, height=50)
+        output_label = ttk.Label(self.frame_move, textvariable=self.move_output_text,
+                                 relief='sunken', width=45, anchor=tkinter.CENTER)
+        output_label.place(x=100, y=80)
+        output_button = ttk.Button(self.frame_move, text='Path', style='Accent.TButton',
+                                   width=5, command=partial(self.open_dir_move, False))
+        output_button.place(x=30, y=75)
 
+        # Folder List
+        list_frame = ttk.LabelFrame(self.frame_move, text='Folder List', labelanchor='n')
+        list_frame.place(x=40, y=115, width=self.windowWidth - 80, height=240)
         for i in range(0, len(self.entry_list)):
             entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[i], width=40)
-            entry.place(x=100, y=110 + (i * 40))
+            entry.place(x=80, y=135 + (i * 30))
 
-        ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=390, y=312)
-
+        # ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=390, y=312)
+        ttk.Entry(self.frame_move, textvariable=self.result_folder, width=20).place(x=140, y=370)
         move_button = ttk.Button(self.frame_move, text='Move', width=25, command=self.move_folder)
-        move_button.place(x=120, y=365)
+        move_button.place(x=120, y=425)
 
     def add_mover_button(self):
         index = len(self.entry_list)
@@ -183,13 +192,20 @@ class ZipBuilder:
         self.entry_list[index].set('')
 
         entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[index], width=40)
-        entry.place(x=100, y=110 + (index * 40))
+        entry.place(x=100, y=90 + (index * 40))
 
     # endregion
 
-    def open_dir_move(self):
+    # region BuildProject
+
+    # endregion
+
+    def open_dir_move(self, is_input):
         dir_name = filedialog.askdirectory(parent=self.window, initialdir="/", title='폴더를 선택해 주세요')
-        self.move_input_text.set(dir_name)
+        if is_input:
+            self.move_input_text.set(dir_name)
+        else:
+            self.move_output_text.set(dir_name)
 
     def make_out_name(self, st):
         string = st.split('/')
@@ -230,16 +246,37 @@ class ZipBuilder:
     def move_folder(self):
         print('------------ Move -------------')
         to = self.move_input_text.get() + '/' + self.move_to
-        if not self.exist_path(to):
-            print('Input Path Error')
+        if not self.exist_path(self.move_input_text.get()) or not self.exist_path(self.move_output_text.get()):
+            print('Path Error')
             return
-        for folder in self.entry_list:
-            if not folder.get() == '':
-                move = self.move_input_text.get() + '/Assets/' + folder.get()
-                if self.exist_path(move):
-                    shutil.move(move, to)
+
+        if self.move_input_text.get() == self.move_output_text.get():
+            for folder in self.entry_list:
+                if not folder.get() == '':
+                    move = self.move_input_text.get() + '/Assets/' + folder.get()
+                    if self.exist_path(move):
+                        # input과 output이 같은 경로일 경우에는 이동만
+                        shutil.move(move, to)
+        else:
+            output = self.move_output_text.get() + '/' + self.result_folder.get()
+            for folder in includes:
+                shutil.copytree(self.move_input_text.get() + folder, output + folder, dirs_exist_ok=True)
+            self.delete_metafile()
+            to = output + '/' + self.move_to
+            for folder in self.entry_list:
+                if not folder.get() == '':
+                    move = output + '/Assets/' + folder.get()
+                    if self.exist_path(move):
+                        shutil.move(move, to)
+
         print('------------  FINISH  ------------ ')
         webbrowser.open(to)
+
+    def delete_metafile(self):
+        path = self.move_output_text.get() + '/' + self.result_folder.get() + '/Assets'
+        for file in os.listdir(path):
+            if file.endswith('.meta'):
+                os.remove(os.path.join(path, file))
 
 
 if __name__ == '__main__':
