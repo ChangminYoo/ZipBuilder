@@ -4,7 +4,8 @@ from tkinter import ttk
 import tkinter.messagebox as messagebox
 import os
 import webbrowser
-
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 class BatchBuilder:
     default_unity_path = 'C:/Program Files/Unity/Hub/Editor/'
@@ -14,7 +15,7 @@ class BatchBuilder:
 
     def __init__(self):
         self.combobox = None
-        self.window = tkinter.Tk()
+        self.window = ttk.Window(themename='journal')
         self.unity_dir_text = tkinter.StringVar()
         self.project_dir_text = tkinter.StringVar()
 
@@ -59,14 +60,8 @@ class BatchBuilder:
         self.unity_dir_text.set(filename)
 
     def gui_init(self):
-        self.window.tk.call("source", "azure.tcl")
-        self.window.tk.call("set_theme", "light")
-
         self.window.title("UnityBatchBuilder")
         self.window.geometry("400x300+300+300")
-
-        style = ttk.Style()
-        style.configure('Accent.TButton', foreground='white')
 
         # Unity 경로
         unity_path_label = ttk.Label(self.window, text='유니티 경로를 설정해 주세요.')

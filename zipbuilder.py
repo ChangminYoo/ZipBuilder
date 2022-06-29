@@ -1,10 +1,10 @@
-import zipfile
-from zipfile import ZipFile
 import os
 import shutil
 import tkinter
 from tkinter import filedialog
 from tkinter import ttk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from functools import partial
 import tkinter.messagebox as messagebox
 import webbrowser
@@ -12,12 +12,14 @@ import webbrowser
 # 포함 되어야 할 폴더
 includes = ['/Assets', '/Packages', '/ProjectSettings']
 
+# 이동시킬 기본 폴더
 move_targets = ['com.unity.sharp-zip-lib@1.2.2-preview.2',
                 'Ifland AvatarEngine',
                 'Ifland AvatarEngine Using ExPlugins',
                 'ifland.tra@2.3.45',
-                # 나중에 TReal폴더도 추가 예정
+                # 나중에 TReal 폴더도 추가 예정
                 ]
+
 
 class ZipBuilder:
     # input 디렉토리 절대경로
@@ -42,13 +44,10 @@ class ZipBuilder:
         self.windowWidth = 450
         self.windowHeight = 450
 
-        self.window = tkinter.Tk()
-        self.window.tk.call("source", "azure.tcl")
-        self.window.tk.call("set_theme", "light")
-
+        self.window = ttk.Window(themename='cosmo')
         self.move_input_text = tkinter.StringVar()
         self.move_output_text = tkinter.StringVar()
-        self.out_text = tkinter.StringVar(value=self.out_dir)   # zip output path text
+        self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
 
         self.window.title("ZipBuilder")
         self.window.update()
@@ -76,7 +75,7 @@ class ZipBuilder:
 
         self.window.mainloop()
 
-#region Zipper
+    # region Zipper
     def set_zipper_frame(self):
         ttk.Label(self.frame_zip, text="디렉토리를 변경할 수 있습니다.").pack()
 
@@ -88,9 +87,6 @@ class ZipBuilder:
 
     def set_zipper_gui(self):
         self.set_zipper_frame()
-
-        style = ttk.Style()
-        style.configure('Accent.TButton', foreground='white')
 
         for i in range(0, len(self.dir_list)):
             self.label_text.append(tkinter.StringVar())
@@ -148,9 +144,10 @@ class ZipBuilder:
             self.out_text.set(dir_name + self.folder_name)
             for directory in self.dir_dictionary:
                 self.dir_dictionary[directory] = self.make_out_name(directory)
-#endregion
 
-#region Mover
+    # endregion
+
+    # region Mover
     def set_mover_GUI(self):
         ttk.Label(self.frame_move, text='디렉토리를 변경할 수 있습니다.').pack()
         self.move_input_text.set('C:/')
@@ -166,14 +163,13 @@ class ZipBuilder:
         input_button.place(x=30, y=55)
 
         move_label = ttk.Label(self.frame_move, text='Move List')
-        move_label.place(x=30, y=(100+(40*len(self.entry_list)/2)))
+        move_label.place(x=30, y=(100 + (40 * len(self.entry_list) / 2)))
 
         for i in range(0, len(self.entry_list)):
             entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[i], width=40)
-            entry.place(x=100, y=110+(i*40))
+            entry.place(x=100, y=110 + (i * 40))
 
-        ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=340, y=312)
-        ttk.Button(self.frame_move, text='-', width=3, command=self.remove_mover_button).place(x=390, y=312)
+        ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=390, y=312)
 
         move_button = ttk.Button(self.frame_move, text='Move', width=25, command=self.move_folder)
         move_button.place(x=120, y=365)
@@ -187,15 +183,9 @@ class ZipBuilder:
         self.entry_list[index].set('')
 
         entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[index], width=40)
-        entry.place(x=100, y=110+(index * 40))
+        entry.place(x=100, y=110 + (index * 40))
 
-    def remove_mover_button(self):
-        index = len(self.entry_list)
-        if index <= 0:
-            return
-
-
-#endregion
+    # endregion
 
     def open_dir_move(self):
         dir_name = filedialog.askdirectory(parent=self.window, initialdir="/", title='폴더를 선택해 주세요')
