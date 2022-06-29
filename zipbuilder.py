@@ -3,11 +3,11 @@ import shutil
 import tkinter
 from tkinter import filedialog
 from tkinter import ttk
-import ttkbootstrap as ttk
+import ttkbootstrap
 from ttkbootstrap.constants import *
-from functools import partial
 import tkinter.messagebox as messagebox
 import webbrowser
+from functools import partial
 
 # 포함 되어야 할 폴더
 includes = ['/Assets', '/Packages', '/ProjectSettings']
@@ -44,7 +44,7 @@ class ZipBuilder:
         self.windowWidth = 450
         self.windowHeight = 450
 
-        self.window = ttk.Window(themename='cosmo')
+        self.window = ttkbootstrap.Window(themename='cosmo')
         self.move_input_text = tkinter.StringVar()
         self.move_output_text = tkinter.StringVar()
         self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text

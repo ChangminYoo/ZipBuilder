@@ -1,11 +1,11 @@
+import os
 import tkinter
 from tkinter import filedialog
 from tkinter import ttk
+import ttkbootstrap
 import tkinter.messagebox as messagebox
 import os
 import webbrowser
-import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
 
 class BatchBuilder:
     default_unity_path = 'C:/Program Files/Unity/Hub/Editor/'
@@ -15,7 +15,7 @@ class BatchBuilder:
 
     def __init__(self):
         self.combobox = None
-        self.window = ttk.Window(themename='journal')
+        self.window = ttkbootstrap.Window(themename='journal')
         self.unity_dir_text = tkinter.StringVar()
         self.project_dir_text = tkinter.StringVar()
 
