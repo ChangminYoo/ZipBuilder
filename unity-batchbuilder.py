@@ -24,10 +24,6 @@ class BatchBuilder:
         self.gui_init()
 
     def run_batch_file(self):
-        if not os.path.isfile(self.batch_file):
-            print('Batch File is Not Exist !!!!!! ')
-            return
-
         self.write_batch_file()
         os.system(self.batch_file)
 
@@ -41,6 +37,7 @@ class BatchBuilder:
     def write_batch_file(self):
         print("-------------------Start Build--------------------")
 
+        # 배치파일 탐색
         self.batch_file = \
             [file for file in os.listdir(self.project_dir_text.get()) if file.endswith(self.batch_file)][0]
 
