@@ -17,8 +17,6 @@ move_targets = ['com.unity.sharp-zip-lib@1.2.2-preview.2',
                 'Ifland AvatarEngine Using ExPlugins',
                 'Ifland AvatarOpenEngine',
                 'ifland.tra@2.3.45',
-                'StreamingAssets',
-                'Treal'
                 ]
 
 
@@ -46,13 +44,13 @@ class ZipBuilder:
         self.windowHeight = 500
 
         # window
-        self.window = ttk.Window("ZipBuilder", themename='cosmo')
+        self.window = ttk.Window("AOP", themename='cosmo')
         self.window.geometry("{}x{}+500+300".format(self.windowWidth, self.windowHeight))
 
         # text
         self.move_input_text = tkinter.StringVar(value='C:/')
         self.move_output_text = tkinter.StringVar(value='C:/')
-        self.mover_result_folder = tkinter.StringVar(value='StagingProject')
+        self.mover_result_folder = tkinter.StringVar(value='IflandOpenStudio_')
         self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
 
         # notebook
@@ -143,7 +141,7 @@ class ZipBuilder:
             self.label_text[num].set(dir_name)
         else:
             self.out_dir = dir_name
-            self.out_text.set(dir_name + self.folder_name)
+            self.out_text.set(dir_name + '/' + self.folder_name)
             for directory in self.dir_dictionary:
                 self.dir_dictionary[directory] = self.make_out_name(directory)
 
@@ -176,23 +174,24 @@ class ZipBuilder:
         list_frame.place(x=40, y=115, width=self.windowWidth - 80, height=240)
         for i in range(0, len(self.entry_list)):
             entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[i], width=40)
-            entry.place(x=80, y=135 + (i * 30))
+            entry.place(x=80, y=135 + (i * 35))
 
-        # ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=390, y=312)
+        ttk.Button(self.frame_move, text='+', width=3, command=self.add_mover_button).place(x=360, y=360)
+
         ttk.Entry(self.frame_move, textvariable=self.mover_result_folder, width=20).place(x=140, y=370)
         move_button = ttk.Button(self.frame_move, text='Move', width=25, command=self.move_folder)
         move_button.place(x=120, y=425)
 
     def add_mover_button(self):
         index = len(self.entry_list)
-        if index >= 5:
+        if index >= 6:
             return
 
         self.entry_list.append(tkinter.StringVar())
         self.entry_list[index].set('')
 
         entry = ttk.Entry(self.frame_move, textvariable=self.entry_list[index], width=40)
-        entry.place(x=100, y=90 + (index * 40))
+        entry.place(x=80, y=135 + (index * 35))
 
     # endregion
 
