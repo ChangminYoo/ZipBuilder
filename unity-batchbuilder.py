@@ -24,6 +24,10 @@ class BatchBuilder:
         self.gui_init()
 
     def run_batch_file(self):
+        if not os.path.isfile(self.batch_file):
+            print('Batch File is Not Exist !!!!!! ')
+            return
+
         self.write_batch_file()
         os.system(self.batch_file)
 
@@ -71,7 +75,7 @@ class BatchBuilder:
         unity_dir_label.place(x=100, y=45)
 
         # 빌드 할 프로젝트 경로
-        build_path_label = ttk.Label(self.window, text='빌드 경로를 설정해 주세요.')
+        build_path_label = ttk.Label(self.window, text='프로젝트 경로를 설정해 주세요.')
         build_path_label.place(x=110, y=85)
         project_dir_button = ttk.Button(self.window, text='path', command=self.open_dir, width=8, style="Accent.TButton")
         project_dir_button.place(x=5, y=110)
