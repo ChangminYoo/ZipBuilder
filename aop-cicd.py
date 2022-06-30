@@ -58,10 +58,10 @@ class ZipBuilder:
         # notebook
         notebook = ttk.Notebook(self.window, width=self.windowWidth, height=self.windowHeight)
         notebook.pack()
-        self.frame_zip = ttk.Frame(self.window)
-        notebook.add(self.frame_zip, text='Zipper')
         self.frame_move = ttk.Frame(self.window)
         notebook.add(self.frame_move, text='Mover')
+        self.frame_zip = ttk.Frame(self.window)
+        notebook.add(self.frame_zip, text='Zipper')
 
         # set Zipper
         for directory in self.dir_list:
@@ -270,7 +270,7 @@ class ZipBuilder:
                         shutil.move(move, to)
 
         print('------------  FINISH  ------------ ')
-        webbrowser.open(to)
+        webbrowser.open(self.move_output_text.get())
 
     def delete_metafile(self):
         path = self.move_output_text.get() + '/' + self.mover_result_folder.get() + '/Assets'
