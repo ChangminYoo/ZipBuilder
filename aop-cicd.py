@@ -353,6 +353,7 @@ class ZipBuilder:
             self.build_output_text.set(dir_name)
 
     def buildproject_move(self):
+        check_right_folder = False
         move = self.build_input_text.get()
         to = self.build_output_text.get() + '/' + self.build_result_folder.get()
         for i in range(0, len(buildproject_includes)):
@@ -364,15 +365,23 @@ class ZipBuilder:
                             folder = to + '/' + buildproject_platform[j][0] + '/' + buildproject_includes[i][0]
                             shutil.copytree(move, folder, dirs_exist_ok=True)
                             print("Move ==== ", move, " -----> ", folder)
+                            check_right_folder = True
 
         guide_txt = self.curr_path + '/Document/Guide.txt'
         guid_docx = self.curr_path + '/Document/OpenPlatform Build Guide.docx'
-        if os.path.exists(guide_txt):
-            shutil.copy(guide_txt, to)
-        if os.path.exists(guid_docx):
-            shutil.copy(guid_docx, to)
+        build_sh = self.curr_path + '/Unity_BuildProject/build.sh'
 
-        self.show_done_message(to)
+        if check_right_folder:
+            if os.path.exists(guide_txt):
+                shutil.copy(guide_txt, to)
+            if os.path.exists(guid_docx):
+                shutil.copy(guid_docx, to)
+            if os.path.exists(build_sh):
+                shutil.copy(build_sh, to)
+            self.show_done_message(to)
+        else:
+            print("Input은  BuildProject_DLL 폴더를 선택해 주세요")
+
     # endregion
 
 
