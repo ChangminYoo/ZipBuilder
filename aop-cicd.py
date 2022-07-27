@@ -17,7 +17,7 @@ move_targets = ['com.unity.sharp-zip-lib@1.2.2-preview.2',
                 'Ifland AvatarEngine',
                 'Ifland AvatarEngine Using ExPlugins',
                 'Ifland AvatarOpenEngine',
-                'ifland.tra@2.3.45',
+                'ifland.tra@2.3.52',
                 ]
 
 # buildproject 배포위해 만들어지게 될 플랫폼
