@@ -57,11 +57,11 @@ class ZipBuilder:
         self.curr_path = os.getcwd()
         self.move_input_text = tkinter.StringVar(value=self.curr_path)
         self.move_output_text = tkinter.StringVar(value=self.curr_path)
-        self.mover_result_folder = tkinter.StringVar(value='IflandOpenStudio_')
+        self.mover_result_folder = tkinter.StringVar(value='IflandOpenStudio')
         self.out_text = tkinter.StringVar(value=self.out_dir)  # zip output path text
         self.build_input_text = tkinter.StringVar(value=self.curr_path)  # buildproject input
         self.build_output_text = tkinter.StringVar(value=self.curr_path)  # buildproject output
-        self.build_result_folder = tkinter.StringVar(value='Unity_BuildProject_')
+        self.build_result_folder = tkinter.StringVar(value='Unity_BuildProject')
 
         # notebook
         notebook = ttk.Notebook(self.window, width=self.windowWidth, height=self.windowHeight)
@@ -367,9 +367,16 @@ class ZipBuilder:
                             print("Move ==== ", move, " -----> ", folder)
                             check_right_folder = True
 
-        guide_txt = self.curr_path + '/Document/Guide.txt'
-        guid_docx = self.curr_path + '/Document/OpenPlatform Build Guide.docx'
-        build_sh = self.curr_path + '/Unity_BuildProject/build.sh'
+        split_path = self.build_input_text.get().split('/')
+        move_path = ''
+        for s in range(0, len(split_path) - 1):
+            move_path += split_path[s]
+            move_path += '/'
+
+        guide_txt = move_path + 'Document/Guide.txt'
+        guid_docx = move_path + 'Document/OpenPlatform Build Guide.docx'
+        build_sh = move_path + 'Unity_BuildProject/build.sh'
+        costume_test_folder = move_path + 'CostumeResourcesForTest'
 
         if check_right_folder:
             if os.path.exists(guide_txt):
@@ -378,9 +385,11 @@ class ZipBuilder:
                 shutil.copy(guid_docx, to)
             if os.path.exists(build_sh):
                 shutil.copy(build_sh, to)
+            if os.path.exists(costume_test_folder):
+                shutil.copytree(costume_test_folder, to + '/CostumeResourcesForTest', dirs_exist_ok=True)
             self.show_done_message(to)
         else:
-            print("Input은  BuildProject_DLL 폴더를 선택해 주세요")
+            print("Input은 AOP : BuildProject_DLL, COP : build_project 폴더를 선택해 주세요")
 
     # endregion
 
